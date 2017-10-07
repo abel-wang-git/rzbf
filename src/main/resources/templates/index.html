@@ -1,0 +1,26 @@
+﻿<html xmlns:th="http://www.thymeleaf.org"  >
+<head>
+    <meta charset="utf-8" />
+    <title>不落阁后台管理系统</title>
+    <div th:include="fragment/head :: head"></div>
+    <link th:href="@{/css/index.css}" rel="stylesheet" />
+</head>
+<body>
+    <div class="mask"></div>
+    <div class="main">
+        <h1><span style="font-size: 84px;">容灾</span><span style="font-size:30px;">备份系统</span></h1>
+        <p id="time"></p>
+        <div class="enter">
+            鼠标点击e&nbsp;&nbsp;或者&nbsp;&nbsp;Enter
+        </div>
+    </div>
+    <!-- layui.js -->
+    <script src="../plugin/layui/layui.js"></script>
+    <!-- layui规范化用法 -->
+    <script type="text/javascript">
+        layui.config({
+            base: '/js/'
+        }).use('index');
+    </script>
+</body>
+</html>

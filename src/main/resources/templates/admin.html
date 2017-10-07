@@ -1,0 +1,117 @@
+
+<html xmlns:th="http://www.thymeleaf.org" style="height: 100%">
+<head >
+    <div th:include="fragment/head :: head"></div>
+</head>
+<body style="height: 100%">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" th:include="fragment/top :: top"></div>
+
+    <div class="layui-side" th:include="fragment/left :: left"> </div>
+
+    <!--主体内容-->
+    <div class="layui-body">
+        <div style="margin:0;position:absolute;top:4px;bottom:0px;width:100%;" class="layui-tab layui-tab-brief" lay-filter="tab" lay-allowclose="true">
+            <ul class="layui-tab-title">
+                <li lay-id="0" class="layui-this">首页</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>系统状态</legend>
+                        <div class="layui-field-box">
+                            <div style="display: inline-block; width:1000px;">
+                                <div id="main" style="height:400px; width: 400px; margin: 0;padding: 0" class="ht-box"></div>
+                                <div id="mem" style="height: 400px; width:400px ;margin: 0;padding: 0;" class="ht-box"></div>
+                            </div>
+                            <div >
+                                <table class="layui-table">
+                                    <tr>
+                                    <td>主库</td>
+                                    </tr>
+                                    <tr th:each="ap:${p}">
+                                        <td th:text="${ap['INSTANCE_NAME']}"></td>
+                                        <td th:text="${ap['STATUS']}"></td>
+                                        <td th:text="${plsnrstat}"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>备库</td>
+                                    </tr>
+                                    <tr th:each="ap:${p}">
+                                        <td th:text="${ap['INSTANCE_NAME']}"></td>
+                                        <td th:text="${ap['STATUS']}"></td>
+                                        <td th:text="${slsnrstat}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div style="clear: both"></div>
+                    </fieldset>
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>进程状态</legend>
+                        <div class="layui-field-box">
+                            <table class="layui-table">
+                                <tr><td>主库进程</td></tr>
+                                <tr th:each="a:${pstatlist}" >
+                                    <td th:text="${a}" ></td>
+                                </tr>
+                                <tr><td>备库进程</td></tr>
+                                <tr th:each="a:${sstatlist}" >
+                                    <td th:text="${a}" ></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  class="layui-footer" th:include="fragment/bottom :: bottom"> </div>
+
+    <div class="individuation animated flipOutY layui-hide" th:include="fragment/setting"></div>
+</div>
+<!-- layui规范化用法 -->
+<script type="text/javascript">
+    layui.config({
+        base: '/js/'
+    }).use('main');
+
+    var mem = echarts.init(document.getElementById('mem'));
+    option = {
+        series: [
+            {
+                name: 'mem',
+                type: 'gauge',
+                data: [{value: 0, name: 'cpu'}]
+            }
+        ]
+    };
+    option2 = {
+        series: [
+            {
+                name: 'mem',
+                type: 'gauge',
+                data: [{value: 0, name: 'mem'}]
+            }
+        ]
+    };
+    var myChart = echarts.init(document.getElementById('main'));
+    var mem = echarts.init(document.getElementById('mem'));
+    myChart.setOption(option, true);
+    mem.setOption(option2, true);
+    setInterval(function () {
+        $.post("/cat/cpu",function (data) {
+            option.series[0].data[0].value =100-Number(data);
+        })
+        myChart.setOption(option, true);
+        $.post("/cat/mem",function (data) {
+            option2.series[0].data[0].value =Number(data);
+        })
+        mem.setOption(option2, true);
+    }, 5000);
+</script>
+</body>
+</html>

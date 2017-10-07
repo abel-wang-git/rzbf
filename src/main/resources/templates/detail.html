@@ -1,0 +1,191 @@
+<html xmlns:th="http://www.thymeleaf.org" style="height: 100%">
+<head >
+    <div th:include="fragment/head :: head"></div>
+</head>
+<body>
+
+<div class="site-title" onclick="sysInfo(this)" th:attr="conid=${conid}">
+    <fieldset><legend><a name="nav">系统信息</a></legend></fieldset>
+</div>
+
+<div id = "sysInfo">
+
+</div>
+
+<div class="site-title" onclick="baseInfo(this)" th:attr="conid=${conid}">
+    <fieldset><legend><a name="nav">基本信息</a></legend></fieldset>
+</div>
+<div id="baseInfo">
+
+</div>
+<div class="site-title">
+    <fieldset><legend><a name="nav">表空间信息</a></legend></fieldset>
+</div>
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>表空间名称</th>
+            <th>总大小MB</th>
+            <th>使用大小MB</th>
+            <th>剩余大小MB</th>
+            <th>剩余百分比MB</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="space:${tablespace}" class="table">
+            <td th:text="${space['TABLESPACE_NAME']}"></td>
+            <td th:text="${space['TOTAL_MB']}"></td>
+            <td th:text="${space['USED_MB']}"></td>
+            <td th:text="${space['FREE_MB']}"></td>
+            <td th:text="${space['FREE_PCT']}"></td>
+        </tr>
+    </tbody>
+</table>
+<div class="site-title">
+    <fieldset><legend><a name="nav">会话信息</a></legend></fieldset>
+</div>
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>sessionID</th>
+            <th>日期</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="se:${sessiondb}" class="table">
+            <td th:text="${se['COUNT(SESSION_ID)']}"></td>
+            <td th:text="${se['TO_CHAR(SAMPLE_TIME,''RR-MON-DDHH24'')']}"></td>
+        </tr>
+    </tbody>
+</table>
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>活动的sessionID</th>
+            <th>日期</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="se:${avticese}" class="table">
+            <td th:text="${se['COUNT(SESSION_ID)']}"></td>
+            <td th:text="${se['TO_CHAR(SAMPLE_TIME,''RR-MON-DDHH24'')']}"></td>
+        </tr>
+    </tbody>
+</table>
+<div class="site-title">
+    <fieldset><legend><a name="nav">连接数</a></legend></fieldset>
+</div>
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>用户名</th>
+            <th>链接数</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="se:${sessGrop}" class="table">
+            <td th:text="${se['USERNAME']}"></td>
+            <td th:text="${se['COUNT(USERNAME)']}"></td>
+        </tr>
+    </tbody>
+</table>
+<div class="site-title">
+    <fieldset><legend><a name="nav">资源限制</a></legend></fieldset>
+</div>
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>资源名称</th>
+            <th>当前值</th>
+            <th>历史最高</th>
+            <th>最高限制</th>
+            <th>无限资源</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="se:${resourceLimit}" class="table">
+            <td th:text="${se['RESOURCE_NAME']}"></td>
+            <td th:text="${se['CURRENT_UTILIZATION']}"></td>
+            <!--  <td th:text="${se['INST_ID']}"></td>-->
+              <td th:text="${se['MAX_UTILIZATION']}"></td>
+              <td th:text="${se['INITIAL_ALLOCATION']}"></td>
+              <td th:text="${se['LIMIT_VALUE']}"></td>
+          </tr>
+      </tbody>
+  </table>
+<div class="site-title">
+    <fieldset><legend><a name="nav">等待事件</a></legend></fieldset>
+</div>
+  <table class="layui-table">
+      <thead>
+          <tr>
+              <th>事件名称</th>
+              <th>等待时间</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr th:each="se:${envnt}" class="table">
+              <td th:text="${se['EVENT']}"></td>
+              <td th:text="${se['TIME_WAITED_FG/1048576']}"></td>
+          </tr>
+      </tbody>
+  </table>
+<div class="site-title">
+    <fieldset><legend><a name="nav">数据库补丁</a></legend></fieldset>
+</div>
+  <table class="layui-table">
+      <thead>
+      <tr>
+          <th>受影响的组件的命名空间</th>
+          <th>具体操作</th>
+          <th>服务器的版本号</th>
+          <th>关于采取的行动的其他意见</th>
+          <th>完成的时间</th>
+          <th>捆绑系列的名称</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="se:${psu}" class="table">
+          <td th:text="${se['NAMESPACE']}"></td>
+          <td th:text="${se['ACTION']}"></td>
+          <td th:text="${se['VERSION']}"></td>
+          <td th:text="${se['COMMENTS']}"></td>
+          <td th:text="${se['ACTION_TIME']}"></td>
+          <td th:text="${se['BUNDLE_SERIES']}"></td>
+      </tr>
+      </tbody>
+  </table>
+<div class="site-title">
+    <fieldset><legend><a name="nav">坏块信息</a></legend></fieldset>
+</div>
+  <table class="layui-table">
+      <thead>
+      <tr>
+          <th>文件编号</th>
+          <th>逻辑损坏的号码</th>
+          <th>坏类型</th>
+          <th>损坏块的块号</th>
+          <th>损坏块的数量</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="se:${isBadBlock}" class="table">
+          <td th:text="${se['FILE#']}"></td>
+          <td th:text="${se['CORRUPTION_CHANGE#']}"></td>
+          <td th:text="${se['CORRUPTION_TYPE']}"></td>
+          <td th:text="${se['BLOCK#']}"></td>
+          <td th:text="${se['BLOCKS']}"></td>
+      </tr>
+      </tbody>
+  </table>
+
+  </body>
+<script th:inline="javascript">
+    function sysInfo(thiz) {
+        $("#sysInfo").load("/sys/"+$(thiz).attr("conid"))
+    }
+    function baseInfo(thiz) {
+        $("#baseInfo").load("/base/"+$(thiz).attr("conid"))
+    }
+</script>
+  </html>

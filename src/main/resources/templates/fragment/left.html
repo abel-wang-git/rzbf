@@ -1,0 +1,26 @@
+<div class="layui-side" xmlns:th="http://www.thymeleaf.org" th:fragment="left">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree" lay-filter="leftnav">
+            <li class="layui-nav-item layui-this">
+                <a href="javascript:;"><i class="fa fa-home"></i>首页</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;"><i class="fa fa-user"></i>日常巡检</a>
+                <dl class="layui-nav-child">
+
+                    <dd>
+                        <a href="javascript:;"  data-url="/cat/1" data-id="1" th:text="主库"></a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;"  data-url="/cat/2" data-id="2" th:text="备库"></a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <!--收起导航-->
+    <div class="layui-side-hide layui-bg-cyan">
+        <i class="fa fa-long-arrow-left fa-fw"></i>收起导航
+    </div>
+</div>
+
