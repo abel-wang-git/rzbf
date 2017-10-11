@@ -90,7 +90,7 @@ public class Cat {
     @PostMapping(value = "/cat/cpu")
     @ResponseBody
     public String  cpu(Model model){
-        Shell sshExecutor = new Shell(MyStartupRunner.source.get(0).getIP(), "oracle", "oracle");
+        Shell sshExecutor = new Shell(MyStartupRunner.source.get(1).getIP(), "oracle", "oracle");
         String c= sshExecutor.execute("vmstat |awk 'NR==3{print $15}'");
         return c.trim();
     }
@@ -98,7 +98,7 @@ public class Cat {
     @PostMapping(value = "/cat/mem")
     @ResponseBody
     public String  mem(Model model){
-        Shell sshExecutor = new Shell(MyStartupRunner.source.get(0).getIP(), "oracle", "oracle");
+        Shell sshExecutor = new Shell(MyStartupRunner.source.get(1).getIP(), "oracle", "oracle");
         String c= sshExecutor.execute("free -m | grep Mem |awk  '{printf(\"%.2f\",($3-$7)/$2*100)}'");
         return c.trim();
     }
@@ -122,7 +122,7 @@ public class Cat {
 
     private String[] mgr(Datasoruce s){
         Shell sshExecutor = new Shell(s.getIP(), s.getSysUser(), s.getSysPwd());
-        String c= sshExecutor.execute("source /home/oracle/.bash_profile&&/u01/ogg/ggsci <<EOF \n" +
+        String c= sshExecutor.execute("source /home/oracle/.bash_profile&&/u03/zb/ggsci <<EOF \n" +
                 "info all \n" +
                 "EOF");
         String[] strings= c.split("\\n");
