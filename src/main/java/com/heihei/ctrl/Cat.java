@@ -29,14 +29,14 @@ public class Cat {
     @GetMapping(value = "/admin")
     public String toadmin(Model model) {
         model.addAttribute("datasource", MyStartupRunner.source);
-        for (Datasoruce s : MyStartupRunner.source) {
+        for (int i =0 ;i<2;i++) {
             try {
-                Connection conn=Dbconnect.dbConnect(s);
-               List dbstat= Dbconnect.query(conn,"select status,INSTANCE_NAME from v$instance");
-                model.addAttribute(s.getName(),dbstat);
-                model.addAttribute(s.getName()+"statlist",status(s));
-                model.addAttribute(s.getName()+"lsnrstat",lsnrstat(s));
-                model.addAttribute(s.getName()+"mgrstat",mgr(s));
+                Connection conn=Dbconnect.dbConnect(MyStartupRunner.source.get(i));
+                List dbstat= Dbconnect.query(conn,"select status,INSTANCE_NAME from v$instance");
+                model.addAttribute(MyStartupRunner.source.get(i).getName(),dbstat);
+                model.addAttribute(MyStartupRunner.source.get(i).getName()+"statlist",status(MyStartupRunner.source.get(i)));
+                model.addAttribute(MyStartupRunner.source.get(i).getName()+"lsnrstat",lsnrstat(MyStartupRunner.source.get(i)));
+                model.addAttribute(MyStartupRunner.source.get(i).getName()+"mgrstat",mgr(MyStartupRunner.source.get(i)));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -90,7 +90,7 @@ public class Cat {
     @PostMapping(value = "/cat/cpu")
     @ResponseBody
     public String  cpu(Model model){
-        Shell sshExecutor = new Shell("192.168.88.252", "oracle", "oracle");
+        Shell sshExecutor = new Shell(MyStartupRunner.source.get(0).getIP(), "oracle", "oracle");
         String c= sshExecutor.execute("vmstat |awk 'NR==3{print $15}'");
         return c.trim();
     }
@@ -98,7 +98,7 @@ public class Cat {
     @PostMapping(value = "/cat/mem")
     @ResponseBody
     public String  mem(Model model){
-        Shell sshExecutor = new Shell("192.168.88.252", "oracle", "oracle");
+        Shell sshExecutor = new Shell(MyStartupRunner.source.get(0).getIP(), "oracle", "oracle");
         String c= sshExecutor.execute("free -m | grep Mem |awk  '{printf(\"%.2f\",($3-$7)/$2*100)}'");
         return c.trim();
     }
