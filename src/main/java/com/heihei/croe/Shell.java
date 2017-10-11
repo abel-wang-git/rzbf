@@ -1,5 +1,6 @@
 package com.heihei.croe;
 
+import com.alibaba.fastjson.JSON;
 import com.heihei.po.Datasoruce;
 import com.heihei.po.SysUserInfo;
 import com.jcraft.jsch.*;
@@ -90,13 +91,14 @@ public class Shell {
     }
 
     public static void main(final String [] args) {
-        Shell sshExecutor = new Shell("192.168.88.252", "oracle", "oracle");
+        Shell sshExecutor = new Shell("192.168.88.251", "oracle", "oracle");
         String s=sshExecutor.execute("source /home/oracle/.bash_profile&&/u01/ogg/ggsci <<EOF \n" +
-                "info all \n" +
+                "lag EITPUX01 \n" +
                 "EOF");
        String[] strings= s.split("\\n");
-       for(int i=12;i<strings.length-3 ;i++){
-           System.out.println(strings[i].split(" "));
-       }
+        for(int i=14;i<15 ;i++){
+            String[] str =strings[i].split("    ");
+            System.out.println(JSON.toJSON(str));
+        }
     }
 }

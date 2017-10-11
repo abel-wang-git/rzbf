@@ -53,13 +53,21 @@
                         <legend>进程状态</legend>
                         <div class="layui-field-box">
                             <table class="layui-table">
-                                <tr><td>主库进程</td></tr>
-                                <tr th:each="a:${pstatlist}" >
-                                    <td th:text="${a}" ></td>
+                                <tr>
+                                    <td>主库进程</td>
+                                    <td th:each="a1:${pmgrstat}" th:text="${a1}" th:unless="${#strings.isEmpty(a1)}"></td>
                                 </tr>
-                                <tr><td>备库进程</td></tr>
-                                <tr th:each="a:${sstatlist}" >
-                                    <td th:text="${a}" ></td>
+                                <tr th:each="a:${pstatlist}" >
+                                    <td th:each="a1:${a}" th:text="${a1}" th:unless="${#strings.isEmpty(a1)}"></td>
+                                    <!--<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="delayed(this)">查看延迟</button></td>-->
+                                </tr>
+                                <tr>
+                                    <td>备库进程</td>
+                                    <td th:each="a1:${pmgrstat}" th:text="${a1}" th:unless="${#strings.isEmpty(a1)}"></td>
+                                </tr>
+                                <tr th:each="a:${sstatlist}"  >
+                                    <td th:each="a1:${a}" th:text="${a1}" th:unless="${#strings.isEmpty(a1)}"></td>
+                                    <!--<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="delayed(this)">查看延迟</button></td>-->
                                 </tr>
                             </table>
                         </div>
@@ -112,6 +120,15 @@
         })
         mem.setOption(option2, true);
     }, 5000);
+    
+ /*   function delayed(thiz) {
+        $.post("/zb/delayed",{name:$(thiz).,s:""},function (data) {
+            layer.open({
+                title: '在线调试',content:data
+            });
+        })
+
+    }*/
 </script>
 </body>
 </html>

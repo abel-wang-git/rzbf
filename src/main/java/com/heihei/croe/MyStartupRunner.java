@@ -20,6 +20,8 @@ import java.util.List;
 //@Order(value=2) 多个CommandLineRunner时 控制顺序
 public class MyStartupRunner implements CommandLineRunner {
     public static  final List<Datasoruce> source = new ArrayList<Datasoruce>();
+
+    public  static  final List<String > IP= new ArrayList<>();
     public static  String conf=null;
 
     public void run(String... strings) throws Exception {

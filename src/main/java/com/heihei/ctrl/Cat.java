@@ -36,6 +36,7 @@ public class Cat {
                 model.addAttribute(s.getName(),dbstat);
                 model.addAttribute(s.getName()+"statlist",status(s));
                 model.addAttribute(s.getName()+"lsnrstat",lsnrstat(s));
+                model.addAttribute(s.getName()+"mgrstat",mgr(s));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -102,17 +103,32 @@ public class Cat {
         return c.trim();
     }
 
-    private List<String> status(Datasoruce s){
-        List<String> list = new ArrayList<>();
+    private List<String[]> status(Datasoruce s){
+        List<String[]> list = new ArrayList<>();
+        Shell sshExecutor = new Shell(s.getIP(), s.getSysUser(), s.getSysPwd());
+        String c= sshExecutor.execute("source /home/oracle/.bash_profile&&/u01/ogg/ggsci <<EOF \n" +
+                "info all \n" +
+                "EOF");
+
+        String[] strings= c.split("\\n");
+        for(int i=14;i<strings.length-3 ;i++){
+
+            String[] str =strings[i].split("    ");
+            logger.info(JSON.toJSONString(str));
+            list .add(str);
+        }
+        return list;
+    }
+
+    private String[] mgr(Datasoruce s){
         Shell sshExecutor = new Shell(s.getIP(), s.getSysUser(), s.getSysPwd());
         String c= sshExecutor.execute("source /home/oracle/.bash_profile&&/u01/ogg/ggsci <<EOF \n" +
                 "info all \n" +
                 "EOF");
         String[] strings= c.split("\\n");
-        for(int i=13;i<strings.length-3 ;i++){
-            list .add(strings[i]);
-        }
-        return list;
+        String[] str =strings[13].split("    ");
+        logger.info(JSON.toJSONString(str));
+        return str ;
     }
 
     private String lsnrstat(Datasoruce s){
